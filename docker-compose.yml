@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+    consumer:
+        build:
+            context: ./Consumer
+            dockerfile: DockerFile
+#        image: consumer
+        depends_on:
+            - rabbitmq
+        volumes:
+            -   ./Consumer:/app
+        deploy:
+            replicas: 3
+
+    producer:
+        build:
+            context: ./Producer
+            dockerfile: DockerFile
+        volumes:
+            - ./Producer:/app
+        depends_on:
+            - rabbitmq
+
+    rabbitmq:
+        image: rabbitmq:management
+        ports:
+            - "5672:5672"
+            - "15672:15672"
