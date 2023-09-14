@@ -1,40 +1,36 @@
 package com.mkrasucki.Producer;
 
-
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.Connection;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import java.util.concurrent.atomic.AtomicInteger;
 
+public class Sender {
 
-@Component
-public class Sender implements CommandLineRunner {
+    @Autowired
+    private RabbitTemplate template;
 
-    private final RabbitTemplate rabbitTemplate;
+    @Autowired
+    private FanoutExchange fanout;
 
-    public Sender(RabbitTemplate rabbitTemplate) {
+    AtomicInteger dots = new AtomicInteger(0);
 
-        this.rabbitTemplate = rabbitTemplate;
-    }
+    AtomicInteger count = new AtomicInteger(0);
 
-
-    @Override
-    public void run(String... args) throws Exception {
-        CachingConnectionFactory connectionFactory = new CachingConnectionFactory("rabbitmq");
-        boolean connected = false;
-        while (!connected) {
-            try {
-                Connection connection = connectionFactory.createConnection();
-                connected = true;
-                connection.close();
-                System.out.println("Sending message...");
-
-                rabbitTemplate.convertAndSend(ProducerApplication.fanoutExchangeName, "foo.bar.baz", "SUDOKU");
-            } catch (Exception e) {
-                System.out.println("Waiting for RabbitMQ to become available...");
-                Thread.sleep(5000);
-            }
+    @Scheduled(fixedDelay = 0, initialDelay = 0)
+    public void send() {
+        StringBuilder builder = new StringBuilder("Hello");
+        if (dots.getAndIncrement() == 3) {
+            dots.set(1);
         }
+        for (int i = 0; i < dots.get(); i++) {
+            builder.append('.');
+        }
+        builder.append(count.incrementAndGet());
+        String message = builder.toString();
+        template.convertAndSend(fanout.getName(), "", message);
+        System.out.println(" [x] Sent '" + message + "'");
     }
+
 }

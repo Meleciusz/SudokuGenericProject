@@ -1,7 +1,8 @@
 package com.mkrasucki.Producer;
 
-import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.Connection;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -11,36 +12,21 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ProducerApplication{
 
-	//static final String topicExchangeName = "spring-boot-exchange";
-
-	static final String fanoutExchangeName = "fanoutExchange";
-	static final String queueName = "spring-boot";
-
-
-	@Bean
-	Queue queue() {
-		return new Queue(queueName, false);
-	}
-
-
-
-//	@Bean
-//	TopicExchange exchange() {
-//		return new TopicExchange(fanoutExchangeName);
-//	}
-
-	FanoutExchange fanoutExchange() {
-		return new FanoutExchange(fanoutExchangeName);
-	}
-
-	@Bean
-	Binding binding(Queue queue, FanoutExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange);
-	}
-
 	public static void main(String[] args) throws InterruptedException{
 
-		SpringApplication.run(ProducerApplication.class, args).close();
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory("rabbitmq");
+		boolean connected = false;
+		while (!connected) {
+			try {
+				Connection connection = connectionFactory.createConnection();
+				connected = true;
+				connection.close();
+				SpringApplication.run(ProducerApplication.class, args);
+			} catch (Exception e) {
+				System.out.println("Waiting for RabbitMQ to become available...");
+				Thread.sleep(5000);
+			}
+		}
 	}
 
 }
