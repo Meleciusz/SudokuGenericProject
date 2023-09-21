@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ConsumerApplication {
 
+
+	//main function, that starts the Spring after securing that RabbitMQ becomes available
 	public static void main(String[] args) throws InterruptedException{
 
 

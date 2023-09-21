@@ -1,5 +1,6 @@
 package Sudoku;
 
+//Pair class to store a sudoku board and its fitness
 class Pair {
     int[][] board;
     double fitness;

@@ -1,7 +1,6 @@
 package Sudoku;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class SudokuSolver {
     private int bestOfHowMany = chromosomeCount;
     private static List<int[][]> lastPopulation = new ArrayList<>();
 
-    public static List<int[][]> getBestOfFive() {
+    public static List<int[][]> getBestPopulation() {
         return lastPopulation;
     }
 
@@ -26,6 +25,7 @@ public class SudokuSolver {
         input = message;
     }
 
+    //Solve the sudoku
     public void findSolution() {
         lastPopulation.clear();
 
@@ -36,13 +36,9 @@ public class SudokuSolver {
             sudokuBoards.add(new Pair(boardIntValue, fitness));
         }
 
-        Comparator<Pair> comparator = Comparator.comparingDouble(pair -> pair.getFitness());
-        Pair maxPair = Collections.max(sudokuBoards, comparator);
-        double maxFitness = maxPair.getFitness();
-
         for(int i = 0; i < populationSize; i++)
         {
-            newPopulation = populationSolver.fineNewGeneration(sudokuBoards);
+            newPopulation = populationSolver.findNewGeneration(sudokuBoards);
         }
 
         for(int i = 0; i < bestOfHowMany; i++)

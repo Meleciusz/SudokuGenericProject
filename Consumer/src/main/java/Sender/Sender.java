@@ -4,7 +4,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import Sudoku.SudokuSolver;
 
 import java.util.List;
@@ -22,8 +21,9 @@ public class Sender {
         this.queue = returnQueue;
     }
 
+    //If user send to message to queue send() method is called
     public void send() {
-        List<int[][]> message = SudokuSolver.getBestOfFive();
+        List<int[][]> message = SudokuSolver.getBestPopulation();
         this.template.convertAndSend(queue.getName(), message);
         System.out.println(" [x] Sent '" + message + "'");
     }

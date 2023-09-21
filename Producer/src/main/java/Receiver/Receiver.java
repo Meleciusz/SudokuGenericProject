@@ -14,6 +14,7 @@ public class Receiver {
 
     private SudokuSolver sudokuSolver;
 
+    //If message is detected in the queue make receive() method
     @RabbitListener(queues = "returnQueue")
     public void receive(List<int[][]> message) throws InterruptedException {
         System.out.println(" [x] Received ");
@@ -22,6 +23,7 @@ public class Receiver {
             messages.add(message.get(i));
         }
 
+        //If we have enough messages(From every instance) find best board
         if(messages.size() == messageSize * instanceSize){
             System.out.println();
             System.out.println();

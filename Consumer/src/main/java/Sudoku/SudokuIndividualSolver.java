@@ -3,35 +3,25 @@ package Sudoku;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
-import java.util.HashMap;
 
+//Class that makes methods on a single sudoku board
 public class SudokuIndividualSolver {
 
-    private final int size = 9;
-    private final int squareSize = 3;
+    private final int sudokuSize = 9;
 
     public int[][] initialize(String input) {
+        char[][] board = convert(input);  // input String converted to char 2D array
+        int[][] boardIntValue = new int[sudokuSize][sudokuSize]; // sudoku board that was filled with numbers
 
-        char[][] board = new char[size][size];
-        int[][] boardIntValue = new int[size][size];
-        StringBuilder sb = new StringBuilder();
-        List<int[]> squares = new ArrayList<>();
-
-       for(int i = 0; i < size; i++) {
-           for(int j = 0; j < size; j++) {
-               board[i][j] = input.charAt(i * size + j);
-           }
-       }
-
+        //Fill up the board
         for (int i = 0; i < 9; i += 3) {
             for (int j = 0; j < 9; j += 3) {
                 fillSquare(board, i, j);
             }
         }
 
-
+        //Convert char 2D array to int 2D array
         IntStream.range(0, board.length)
                 .forEach(i ->
                         IntStream.range(0, board[i].length)
@@ -42,13 +32,30 @@ public class SudokuIndividualSolver {
         return boardIntValue;
     }
 
+    //Convert input String to char 2D array
+    private char[][] convert(String input){
+        char[][] board = new char[sudokuSize][sudokuSize];
+
+        for(int i = 0; i < sudokuSize; i++) {
+            for(int j = 0; j < sudokuSize; j++) {
+                board[i][j] = input.charAt(i * sudokuSize + j);
+            }
+        }
+
+        return board;
+    }
+
+    //Fill up the sudoku board
     public static void fillSquare(char[][] sudoku, int row, int col) {
+        //Create a list of numbers
         List<Integer> numbers = new ArrayList<>();
         for (int num = 1; num <= 9; num++) {
             numbers.add(num);
         }
+        //Shuffle the numbers
         Collections.shuffle(numbers);
 
+        //Remove the numbers from random numbers list that was already filled
         for (int i = row; i < row + 3; i++) {
             for (int j = col; j < col + 3; j++) {
                 char cellValue = sudoku[i][j];
@@ -59,6 +66,7 @@ public class SudokuIndividualSolver {
             }
         }
 
+        //Fill up the sudoku
         int index = 0;
         for (int i = row; i < row + 3; i++) {
             for (int j = col; j < col + 3; j++) {
@@ -70,6 +78,7 @@ public class SudokuIndividualSolver {
         }
     }
 
+    //Print the sudoku
     public static void printSudoku(char[][] sudoku) {
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -79,6 +88,7 @@ public class SudokuIndividualSolver {
         }
     }
 
+    //Fitness function that gives a percentage accuracy
     public static double fitFunction(int[][] sudoku) {
         int totalNumbers = 9 * 9;
         int totalRepeats = 0;

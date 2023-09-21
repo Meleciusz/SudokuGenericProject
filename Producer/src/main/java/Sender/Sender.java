@@ -13,6 +13,7 @@ public class Sender {
     private FanoutExchange fanout;
 
 
+    //If user send to message to queue send() method is called
     public void send(String message) {
 
         template.convertAndSend(fanout.getName(), "", message);
