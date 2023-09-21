@@ -1,13 +1,12 @@
-package com.mkrasucki.Consumer;
+package Receiver;
 
-import Sudoku.Builder;
+import Sudoku.SudokuSolver;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.util.StopWatch;
 
 public class Receiver {
 
   public String message;
-  private Builder builder;
+  private SudokuSolver builder;
 
 
   public String getMessage() {
@@ -19,7 +18,8 @@ public class Receiver {
     this.message = message;
     System.out.println("[x] Received " + message);
 
-    builder = new Builder(message);
+    builder = new SudokuSolver(message);
+    builder.findSolution();
   }
 
 
