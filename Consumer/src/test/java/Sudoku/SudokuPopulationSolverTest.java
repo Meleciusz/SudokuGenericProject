@@ -13,6 +13,7 @@ class SudokuPopulationSolverTest {
     private List<Pair> sudokuBoards = new ArrayList<>();
     private int chromosomeCount = 60;
     private int boardSize = 81;
+    private int sudokuSize = 9;
     private SudokuIndividualSolver individualSolver = new SudokuIndividualSolver();
     private  SudokuPopulationSolver populationSolver = new SudokuPopulationSolver();
     private String input="..41..3.8.1....62...82..4.....3.28.9....7....7.16.8...562..17.3.3.....4.1....5...";
@@ -64,5 +65,21 @@ class SudokuPopulationSolverTest {
             assertArrayEquals(sudokuBoardsCopy.get(i).getBoard(), bestHalf.get(i).getBoard());
         }
 
+    }
+
+    @Test
+    @DisplayName("Test if mutation is working correctly")
+    void testMutation(){
+        int[][] beforeMutation = new int[sudokuSize][sudokuSize];
+        for(int i=0; i<sudokuSize; i++){
+            for(int j=0; j<sudokuSize; j++){
+                beforeMutation[i][j] = sudokuBoards.get(0).getBoard()[i][j];
+            }
+        }
+
+        int[][] boardAfterMutation = populationSolver.mutate(sudokuBoards.get(0).getBoard());
+
+
+        assertFalse(Arrays.equals(beforeMutation, boardAfterMutation));
     }
 }

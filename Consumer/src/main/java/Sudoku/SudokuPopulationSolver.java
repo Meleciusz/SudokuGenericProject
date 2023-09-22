@@ -90,11 +90,19 @@ public class SudokuPopulationSolver {
     }
 
     //Mutate
-    private int[][] mutate(int[][] board){
+    public int[][] mutate(int[][] board){
+
         Random random = new Random();
-        int[] randomCoordinates = new int[2];
-        randomCoordinates[0] = random.nextInt(9);
-        randomCoordinates[1] = random.nextInt(9);
+        int[] randomCoordinatesX = new int[2];
+        randomCoordinatesX[0] = random.nextInt(9);
+        randomCoordinatesX[1] = random.nextInt(9);
+        int[] randomCoordinatesY = new int[2];
+        randomCoordinatesY[0] = random.nextInt(9);
+        randomCoordinatesY[1] = random.nextInt(9);
+
+        int tmp = board[randomCoordinatesX[0]][randomCoordinatesY[0]];
+        board[randomCoordinatesX[0]][randomCoordinatesY[0]] = board[randomCoordinatesX[1]][randomCoordinatesY[1]];
+        board[randomCoordinatesX[1]][randomCoordinatesY[1]] = tmp;
 
         return board;
     }
