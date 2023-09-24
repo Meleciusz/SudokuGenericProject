@@ -22,8 +22,8 @@ public class Sender {
     }
 
     //If user send to message to queue send() method is called
-    public void send() {
-        List<int[][]> message = SudokuSolver.getBestPopulation();
+    public void send(List<int[][]> message) {
+
         this.template.convertAndSend(queue.getName(), message);
         System.out.println(" [x] Sent '" + message + "'");
     }

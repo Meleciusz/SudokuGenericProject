@@ -4,7 +4,9 @@ import Sender.Sender;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+import java.util.List;
+
+//@RestController
 public class ConsumerController {
     private Sender sender;
 
@@ -12,8 +14,7 @@ public class ConsumerController {
         this.sender = sender;
     }
 
-    @GetMapping("/send")
-    public void send() {
-        sender.send();
+    public void send(List<int[][]> message) {
+        sender.send(message);
     }
 }

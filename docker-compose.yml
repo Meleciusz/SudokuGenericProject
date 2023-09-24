@@ -5,7 +5,6 @@ services:
         build:
             context: ./Consumer
             dockerfile: DockerFile
-#        image: consumer
         depends_on:
             - rabbitmq
         volumes:
@@ -27,3 +26,4 @@ services:
         ports:
             - "5672:5672"
             - "15672:15672"
+
