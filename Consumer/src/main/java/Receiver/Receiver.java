@@ -25,13 +25,13 @@ public class Receiver {
     System.out.println("[x] Received " + message);
 
     if(message.length() == howManyElementsShouldSudokuHave) {
-      builder = new SudokuSolver(message);
-      builder.findSolution();
+        builder = new SudokuSolver(message);
+        builder.findSolution();
 
-      List<int[][]> output = SudokuSolver.getBestPopulation();
-      sender.send(output);
+        List<int[][]> output = SudokuSolver.getBestPopulation();
+        sender.send(output);
     } else {
-      System.out.println("Wrong message");
+        System.out.println("Wrong message");
     }
   }
 }

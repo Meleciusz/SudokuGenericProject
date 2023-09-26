@@ -24,12 +24,16 @@ public class Receiver {
         }
 
         //If we have enough messages(From every instance) find best board
-        if(messages.size() == messageSize * instanceSize){
+        boolean canBeDone = (messageSize * instanceSize)%3 == 0;
+        if(messages.size() == messageSize * instanceSize && canBeDone){
+            
             System.out.println();
             System.out.println();
             System.out.println();
+
             sudokuSolver = new SudokuSolver(messages);
             sudokuSolver.findBestSudoku();
+            messages.clear();
         }
     }
 }

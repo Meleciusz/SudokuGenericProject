@@ -42,8 +42,8 @@ public class SudokuPopulationSolver {
     //Create new population (children) from parent population
     private void generateChildren(int[][] ParentBoardFirst, int[][] ParentBoardSecond) {
 
-        int minCoordinate = 3;
-        int maxCoordinate = 6;
+        int minCoordinate = 2;
+        int maxCoordinate = 7;
 
         Random random = new Random();
 
@@ -57,52 +57,80 @@ public class SudokuPopulationSolver {
         }
     }
 
-    //Create new board from parents
-    public int[][] createNewBoard(int[][] ParentBoardFirst, int[][] ParentBoardSecond, int y) {
+    //Create new board from parents (y - which block in sudoku board)
+    public int[][] createNewBoard(int[][] parentBoardFirst, int[][] parentBoardSecond, int y) {
         int[][] newBoard = new int[sudokuSize][sudokuSize];
 
-        for(int i = 0; i< sudokuSize; i++){
-            for(int j=0; j<y; j++){
-                newBoard[i][j] = ParentBoardFirst[i][j];
-            }
+        Random random = new Random();
+        //Randomly choose blocks and copy them to new board
+        for(int i=0; i<y; i++){
+            int row = random.nextInt(3) * 3;
+            int col = random.nextInt(3) * 3;
+            copySquare(parentBoardFirst, newBoard, row, col);
         }
 
-        for(int i = 0; i< sudokuSize; i++){
-            for(int j = y; j< sudokuSize; j++){
-                newBoard[i][j] = ParentBoardSecond[i][j];
+        //Copy remaining blocks to new board
+        for (int row = 0; row < 9; row += 3) {
+            for (int col = 0; col < 9; col += 3) {
+                if (newBoard[row][col] == 0) {
+                    copySquare(parentBoardSecond, newBoard, row, col);
+                }
             }
         }
 
         //Sudoku have 1% to mutate
         boolean mutation = false;
         double chance = 0.01;
-        Random random = new Random();
         double ifMutation = random.nextDouble();
         if(ifMutation < chance){
             mutation=true;
         }
 
         if(mutation){
-            newBoard = mutate(newBoard);
+            for(int i=0; i<10; i++){
+                newBoard = mutate(newBoard);
+            }
         }
 
         return newBoard;
+    }
+
+    //Copy square to new board
+    private void copySquare(int[][] parent, int[][] newBoard, int row, int col){
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                newBoard[row + i][col + j] = parent[row + i][col + j];
+            }
+        }
     }
 
     //Mutate
     public int[][] mutate(int[][] board){
 
         Random random = new Random();
-        int[] randomCoordinatesX = new int[2];
-        randomCoordinatesX[0] = random.nextInt(9);
-        randomCoordinatesX[1] = random.nextInt(9);
-        int[] randomCoordinatesY = new int[2];
-        randomCoordinatesY[0] = random.nextInt(9);
-        randomCoordinatesY[1] = random.nextInt(9);
+        int[] randomCoordinatesX = new int[3];
+        randomCoordinatesX[0] = random.nextInt(2);
+        randomCoordinatesX[1] = random.nextInt(5 - 3 + 1) + 3;
+        randomCoordinatesX[2] = random.nextInt(8 - 6 + 1) + 6;
+        int[] randomCoordinatesY = new int[3];
+        randomCoordinatesY[0] = random.nextInt(2);
+        randomCoordinatesY[1] = random.nextInt(5 - 3 + 1) + 3;
+        randomCoordinatesY[2] = random.nextInt(8 - 6 + 1) + 6;
 
-        int tmp = board[randomCoordinatesX[0]][randomCoordinatesY[0]];
-        board[randomCoordinatesX[0]][randomCoordinatesY[0]] = board[randomCoordinatesX[1]][randomCoordinatesY[1]];
-        board[randomCoordinatesX[1]][randomCoordinatesY[1]] = tmp;
+        int[] changeCoordinatesX = new int[3];
+        changeCoordinatesX[0] = random.nextInt(2);
+        changeCoordinatesX[1] = random.nextInt(5 - 3 + 1) + 3;
+        changeCoordinatesX[2] = random.nextInt(8 - 6 + 1) + 6;
+        int[] changeCoordinatesY = new int[3];
+        changeCoordinatesY[0] = random.nextInt(2);
+        changeCoordinatesY[1] = random.nextInt(5 - 3 + 1) + 3;
+        changeCoordinatesY[2] = random.nextInt(8 - 6 + 1) + 6;
+
+        for(int i=0; i<3; i++){
+            int tmp = board[randomCoordinatesX[i]][randomCoordinatesY[i]];
+            board[randomCoordinatesX[i]][randomCoordinatesY[i]] = board[changeCoordinatesX[i]][changeCoordinatesY[i]];
+            board[changeCoordinatesX[i]][changeCoordinatesY[i]] = tmp;
+        }
 
         return board;
     }
