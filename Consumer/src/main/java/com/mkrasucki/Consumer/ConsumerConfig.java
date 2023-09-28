@@ -13,25 +13,6 @@ public class ConsumerConfig {
 
     //    Receiver profile ↓
 
-    // Define which exchange is using + binding name
-    @Bean
-    public FanoutExchange fanout() {
-        return new FanoutExchange("tut.fanout");
-    }
-
-    //Create queue
-    @Bean
-    public Queue autoDeleteQueue1() {
-        return new AnonymousQueue();
-    }
-
-    //Bind queue to exchange
-    @Bean
-    public Binding binding1(FanoutExchange fanout,
-                            Queue autoDeleteQueue1) {
-        return BindingBuilder.bind(autoDeleteQueue1).to(fanout);
-    }
-
 
     //Create receiver profile
     @Bean

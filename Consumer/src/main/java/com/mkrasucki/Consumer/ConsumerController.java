@@ -1,8 +1,9 @@
 package com.mkrasucki.Consumer;
 
 import Sender.Sender;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.RestController;
+import Answer.Answer;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ConsumerController {
         this.sender = sender;
     }
 
-    public void send(List<int[][]> message) {
+    public void send(Answer message) throws JsonProcessingException {
         sender.send(message);
     }
 }

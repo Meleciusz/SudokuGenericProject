@@ -1,6 +1,9 @@
 package Receiver;
 
+import Answer.Answer;
 import Sudoku.SudokuSolver;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mkrasucki.Producer.ProducerController;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.ArrayList;
@@ -16,24 +19,29 @@ public class Receiver {
 
     //If message is detected in the queue make receive() method
     @RabbitListener(queues = "returnQueue")
-    public void receive(List<int[][]> message) throws InterruptedException {
-        System.out.println(" [x] Received ");
+    public void receive(String message){
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        for(int i = 0; i < message.size(); i++){
-            messages.add(message.get(i));
+        try{
+            Answer answer = objectMapper.readValue(message, Answer.class);
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println(" [x] Received Sudoku "+answer.getID());
+            ProducerController.allMessages.get(answer.getID() - 1).setState("COMPLETED");
+
+
+            sudokuSolver = new SudokuSolver(answer.getLastPopulation());
+            sudokuSolver.findBestSudoku();
+
+        }catch(Exception e){
+            e.printStackTrace();
         }
 
         //If we have enough messages(From every instance) find best board
-        boolean canBeDone = (messageSize * instanceSize)%3 == 0;
-        if(messages.size() == messageSize * instanceSize && canBeDone){
             
-            System.out.println();
-            System.out.println();
-            System.out.println();
 
-            sudokuSolver = new SudokuSolver(messages);
-            sudokuSolver.findBestSudoku();
-            messages.clear();
-        }
+        messages.clear();
+
     }
 }

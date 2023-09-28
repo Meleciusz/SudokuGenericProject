@@ -1,25 +1,26 @@
 package com.mkrasucki.Producer;
 
-import Receiver.Receiver;
 import Sender.Sender;
+import Receiver.Receiver;
 import org.springframework.amqp.core.*;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Repository;
 
 
 @Configuration
 public class ProducerConfig {
 
-    // Define which exchange is using + binding name
     @Bean
-    public FanoutExchange fanout() {
-        return new FanoutExchange("tut.fanout");
+    public Queue senderQueue(){
+        return new Queue("sender");
     }
 
     //Create sender profile
     @Bean
     public Sender sender() {
-        return new Sender();
+        return new Sender(senderQueue());
     }
 
     //Create receiver profile
