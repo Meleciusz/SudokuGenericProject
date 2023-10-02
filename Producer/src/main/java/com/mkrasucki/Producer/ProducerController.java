@@ -8,15 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import Repository.Task;
+import Task.Task;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class ProducerController {
 
-//    @Autowired
-//    private TasksRepository tasksRepository;
 
     private Sender sender;
 

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.List;
 
+//class that represents the answer sudoku board
 public class Answer {
     @Getter @Setter
     private List<int[][]> lastPopulation;

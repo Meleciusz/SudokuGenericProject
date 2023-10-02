@@ -11,9 +11,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConsumerConfig {
 
-    //    Receiver profile ↓
-
-
     //Create receiver profile
     @Bean
     public Receiver receiver() {

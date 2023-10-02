@@ -2,21 +2,12 @@ package com.mkrasucki.Producer;
 
 
 
-import Repository.Task;
-import jakarta.annotation.PreDestroy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import Task.Task;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.Connection;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,7 +18,6 @@ import static com.mkrasucki.Producer.ProducerController.allMessages;
 public class ProducerApplication{
 
 	//main function, that starts the Spring after securing that RabbitMQ becomes available
-
 
 	public static void main(String[] args) throws InterruptedException {
 
@@ -41,17 +31,20 @@ public class ProducerApplication{
 
 				SpringApplication.run(ProducerApplication.class, args);
 
-//				ExecutorService executorService = Executors.newSingleThreadExecutor();
-//				executorService.execute(() -> {
-//					while(true){
-//						showProgress();
-//						try{
-//							Thread.sleep(1000);
-//						}catch (InterruptedException e) {
-//							Thread.currentThread().interrupt();
-//						}
-//					}
-//				});
+				ExecutorService executorService = Executors.newSingleThreadExecutor();
+				executorService.execute(() -> {
+					while(true){
+						if(!allMessages.stream().allMatch(task -> "COMPLETED".equals(task.getState()))
+								&& !allMessages.stream().allMatch(task -> "ADDED".equals(task.getState()))){
+						showProgress();
+							try{
+								Thread.sleep(1000);
+							}catch (InterruptedException e) {
+								Thread.currentThread().interrupt();
+								}
+						}
+					}
+				});
 
 			} catch (Exception e) {
 				System.out.println("Waiting for RabbitMQ to become available...");
@@ -62,8 +55,10 @@ public class ProducerApplication{
 
 
 	public static void showProgress(){
+		System.out.println("");
+		System.out.println("Task status:         ");
 		for(Task task : allMessages){
-			System.out.println(task.getState());
+			System.out.println(task.getID()+ " " +task.getState());
 		}
 	}
 }

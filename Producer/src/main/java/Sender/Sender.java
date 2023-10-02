@@ -1,7 +1,7 @@
 package Sender;
 
 
-import Repository.Task;
+import Task.Task;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -33,14 +33,11 @@ public class Sender {
             String json = mapper.writeValueAsString(message.get(i));
             template.convertAndSend(queue.getName(), json);
 
-            System.out.println("Task state:");
-            for(Task task : message) {
-                System.out.println(task.getState());
-            }
         }
     }
 
     //curl http://localhost:8080/add?message=..41..3.8.1....62...82..4.....3.28.9....7....7.16.8...562..17.3.3.....4.1....5...
+    //curl http://localhost:8080/send
     //docker run --name dbTasks -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 
 }

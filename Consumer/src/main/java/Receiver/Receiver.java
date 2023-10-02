@@ -14,12 +14,8 @@ import java.util.List;
 @Component
 public class Receiver {
 
-  private SudokuSolver builder;
-
   @Autowired
   ConsumerController sender;
-
-  private int howManyElementsShouldSudokuHave = 81;
 
 
   //If message is detected in the queue make receive() method

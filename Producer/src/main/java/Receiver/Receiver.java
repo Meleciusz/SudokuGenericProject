@@ -11,8 +11,6 @@ import java.util.List;
 
 public class Receiver {
 
-    private int messageSize = 60;
-    private int instanceSize = 3;
     private static List<int[][]> messages = new ArrayList<>();
 
     private SudokuSolver sudokuSolver;
