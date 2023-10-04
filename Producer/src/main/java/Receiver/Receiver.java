@@ -1,9 +1,10 @@
 package Receiver;
 
-import Answer.Answer;
+import Model.Answer;
+import Repository.Repository;
+import Sender.Sender;
 import Sudoku.SudokuSolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mkrasucki.Producer.ProducerController;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
 import java.util.ArrayList;
@@ -11,9 +12,8 @@ import java.util.List;
 
 public class Receiver {
 
-    private static List<int[][]> messages = new ArrayList<>();
-
     private SudokuSolver sudokuSolver;
+    private Repository repository = Repository.getRepository();
 
     //If message is detected in the queue make receive() method
     @RabbitListener(queues = "returnQueue")
@@ -25,9 +25,8 @@ public class Receiver {
             System.out.println();
             System.out.println();
             System.out.println();
-            System.out.println(" [x] Received Sudoku "+answer.getID());
-            ProducerController.allMessages.get(answer.getID() - 1).setState("COMPLETED");
-
+            System.out.println(" [x] Received Sudoku "+repository.getID());
+            repository.setStateById(repository.getID(), "COMPLETED");
 
             sudokuSolver = new SudokuSolver(answer.getLastPopulation());
             sudokuSolver.findBestSudoku();
@@ -35,11 +34,6 @@ public class Receiver {
         }catch(Exception e){
             e.printStackTrace();
         }
-
-        //If we have enough messages(From every instance) find best board
-            
-
-        messages.clear();
 
     }
 }

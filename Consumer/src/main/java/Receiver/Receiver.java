@@ -1,19 +1,20 @@
 package Receiver;
 
-import Answer.Answer;
+import Model.Answer;
 import Sudoku.SudokuSolver;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mkrasucki.Consumer.ConsumerController;
+import Model.Consumer.ConsumerController;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import Task.Task;
+import Model.Task;
 
 import java.util.List;
 
 @Component
-public class Receiver {
+public class  Receiver {
 
+  private ObjectMapper objectMapper = new ObjectMapper();
   @Autowired
   ConsumerController sender;
 
@@ -22,7 +23,6 @@ public class Receiver {
   @RabbitListener(queues = "sender")
   public void receive(String message) throws InterruptedException {
     System.out.println("[x] Received " + message);
-    ObjectMapper objectMapper = new ObjectMapper();
 
     try{
       Task task = objectMapper.readValue(message, Task.class);
@@ -31,7 +31,7 @@ public class Receiver {
       List<int[][]> bestPopulation = solver.getBestPopulation();
 
 
-      sender.send(new Answer(bestPopulation, task.getID()));
+      sender.send(new Answer(bestPopulation));
 
     } catch (Exception e){
       e.printStackTrace();
