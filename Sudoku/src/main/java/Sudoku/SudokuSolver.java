@@ -2,6 +2,8 @@ package Sudoku;
 
 import java.util.*;
 
+import Repository.Repository;
+
 public class SudokuSolver {
 
     private final int chromosomeCount = 60;
@@ -29,6 +31,7 @@ public class SudokuSolver {
     {
         input = message;
     }
+    private Repository repository = Repository.getRepository();
 
     //Solve the sudoku
     public void findSolution() {
@@ -80,6 +83,7 @@ public class SudokuSolver {
 
         //Determine best board
         bestBoard = newPopulation.get(0).getBoard();
+        repository.setAnswerById(repository.getID(), bestBoard);
         individualSolver.showBestBoard(newPopulation.get(0).getFitness(), sudokuSize, bestBoard);
     }
 

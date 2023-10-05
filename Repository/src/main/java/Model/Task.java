@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-//@ConstructorParameters(value = {"task", "state"})
 public class Task {
 
     @Getter @Setter
