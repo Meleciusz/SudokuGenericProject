@@ -1,9 +1,9 @@
 package Receiver;
 
+import Sender.Sender;
 import Sudoku.SudokuSolver;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import Model.Consumer.ConsumerController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +17,18 @@ import java.util.List;
 @Component
 public class  Receiver {
   @Autowired
-  ConsumerController sender;
+  Sender sender;
 
   private ObjectMapper objectMapper = new ObjectMapper();
 
   //If message is detected in the queue make receive() method
   @RabbitListener(queues = "${queue.name}")
   public void receive(String message) throws JsonProcessingException {
-    log.info(" [x] Received " + message);
-
     Task task = objectMapper.readValue(message, Task.class);
+    log.info(" [x] Received " + message);
+;
+
+
     SudokuSolver solver = new SudokuSolver(task.getTask());
     solver.findSolution();
     List<int[][]> bestPopulation = solver.getBestPopulation();

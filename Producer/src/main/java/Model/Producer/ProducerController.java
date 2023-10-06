@@ -1,5 +1,7 @@
 package Model.Producer;
 
+import Model.Status;
+import Repository.Repository;
 import Sender.Sender;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import Model.Task;
+import Model.Status;
 
 @RestController
 public class ProducerController {
@@ -19,11 +22,13 @@ public class ProducerController {
         this.sender = sender;
     }
 
-
+    private static Repository repository = Repository.getRepository();
 
     @GetMapping("/send")
     public void send(@RequestParam(value = "message") String message) throws JsonProcessingException {
-        String firstState = "ADDED";
-        sender.send(new Task(message, firstState));
+        Task task = new Task(message, Status.ADDED.toString());
+        repository.add(task);
+        repository.setStateById(repository.getID(), Status.ADDED.toString());
+        sender.send(task);
     }
 }

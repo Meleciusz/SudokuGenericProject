@@ -79,14 +79,6 @@ public class SudokuIndividualSolver {
     }
 
     //Print the sudoku
-    public static void printSudoku(char[][] sudoku) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                System.out.print(sudoku[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
 
     //Fitness function that gives a percentage accuracy
     public static double fitFunction(int[][] sudoku) {
@@ -118,18 +110,5 @@ public class SudokuIndividualSolver {
 
         double fitnessPercentage = 100 - (double) (totalRepeats * 100) / totalNumbers;
         return fitnessPercentage;
-    }
-
-    public void showBestBoard(double fitness, int sudokuSize, int[][] bestBoard) {
-        System.out.println("Accuracy: " + fitness);
-        System.out.println();
-        System.out.println("Best Board: ");
-
-        for(int i=0; i<sudokuSize; i++){
-            for(int j=0; j<sudokuSize; j++){
-                System.out.print(bestBoard[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 }

@@ -56,7 +56,7 @@ public class SudokuSolver {
 
     }
 
-    public void findBestSudoku(){
+    public int[][] findBestSudoku(){
         //Define min and max coordinates
         int minCoordinateFirst = 2;
         int maxCoordinateFirst = 4;
@@ -83,8 +83,8 @@ public class SudokuSolver {
 
         //Determine best board
         bestBoard = newPopulation.get(0).getBoard();
-        repository.setAnswerById(repository.getID(), bestBoard);
-        individualSolver.showBestBoard(newPopulation.get(0).getFitness(), sudokuSize, bestBoard);
+
+        return bestBoard;
     }
 
 

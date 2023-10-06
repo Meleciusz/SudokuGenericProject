@@ -23,15 +23,10 @@ public class Sender {
     public Sender(@Qualifier Queue senderQueue) {
         this.queue = senderQueue;
     }
-
-    private static Repository repository = Repository.getRepository();
     private ObjectMapper objectMapper = new ObjectMapper();
-
+    private static Repository repository = Repository.getRepository();
     //If user send to message to queue send() method is called
     public void send(Task message) throws JsonProcessingException {
-        repository.add(message);
-        repository.setStateById(repository.getID(), "ADDED");
-
         log.info("ID:" + repository.getID() + " [x] Sent " + message + " state: " + repository.getStateById(repository.getID()));
 
         String json = objectMapper.writeValueAsString(message);

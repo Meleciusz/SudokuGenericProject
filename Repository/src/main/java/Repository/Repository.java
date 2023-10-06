@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 //Class representing a Repository
@@ -15,9 +13,6 @@ import java.util.Map;
 public class Repository {
 
     //synchronized ID to avoid race conditions
-    public synchronized void synchronizedLastAssignedID() {
-        setID(getID() + 1);
-    }
     @Getter @Setter
     private static int ID = 0;
 
@@ -28,9 +23,10 @@ public class Repository {
     @Getter @Setter
     private static Map<Integer, int[][]> answersRepository = new HashMap<>();
 
+    //synchronized ID and repository objects  to avoid race conditions
     //add new record to repository. Give it an ID and sort of foreign key from tasksRepository to answersRepository
-    public void add(Task task) {
-        synchronizedLastAssignedID();
+    public synchronized void add(Task task) {
+        ID++;
         this.tasksRepository.put(this.ID, task);
         this.answersRepository.put(this.ID, null);
     }
