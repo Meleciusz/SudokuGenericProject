@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//Class representing a Repository
 @NoArgsConstructor
 public class Repository {
 
-//    private static int lastAssignedID = 0;
-
+    //synchronized ID to avoid race conditions
     public synchronized void synchronizedLastAssignedID() {
         setID(getID() + 1);
     }
@@ -28,6 +28,7 @@ public class Repository {
     @Getter @Setter
     private static Map<Integer, int[][]> answersRepository = new HashMap<>();
 
+    //add new record to repository. Give it an ID and sort of foreign key from tasksRepository to answersRepository
     public void add(Task task) {
         synchronizedLastAssignedID();
         this.tasksRepository.put(this.ID, task);

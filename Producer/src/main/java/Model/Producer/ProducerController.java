@@ -1,7 +1,5 @@
 package Model.Producer;
 
-//import Repository.Repository.Task;
-//import Repository.Repository.TasksRepository;
 import Sender.Sender;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;

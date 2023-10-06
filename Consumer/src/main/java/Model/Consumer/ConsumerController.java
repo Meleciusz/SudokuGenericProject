@@ -1,7 +1,6 @@
 package Model.Consumer;
 
 import Sender.Sender;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.RestController;
 
 

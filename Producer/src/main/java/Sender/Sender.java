@@ -4,12 +4,14 @@ package Sender;
 import Model.Task;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.amqp.core.Queue;
 import Repository.Repository;
 
+@Slf4j
 public class Sender {
 
     @Autowired
@@ -18,7 +20,7 @@ public class Sender {
     private Queue queue;
 
     @Autowired
-    public Sender(@Qualifier("returnQueue") Queue senderQueue) {
+    public Sender(@Qualifier Queue senderQueue) {
         this.queue = senderQueue;
     }
 
@@ -30,7 +32,7 @@ public class Sender {
         repository.add(message);
         repository.setStateById(repository.getID(), "ADDED");
 
-        System.out.println("ID:" + repository.getID() + " [x] Sent " + message + " state: " + repository.getStateById(repository.getID()));
+        log.info("ID:" + repository.getID() + " [x] Sent " + message + " state: " + repository.getStateById(repository.getID()));
 
         String json = objectMapper.writeValueAsString(message);
         template.convertAndSend(queue.getName(), json);

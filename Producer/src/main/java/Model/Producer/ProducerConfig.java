@@ -2,10 +2,8 @@ package Model.Producer;
 
 import Sender.Sender;
 import Receiver.Receiver;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,9 +11,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ProducerConfig {
 
+    @Value("${returnQueue.name}")
+    private String returnQueueName;
+
     @Bean
     public Queue senderQueue(){
-        return new Queue("sender");
+        return new Queue(returnQueueName);
     }
 
     //Create sender profile
