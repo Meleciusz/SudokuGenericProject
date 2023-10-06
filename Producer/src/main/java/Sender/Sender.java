@@ -4,14 +4,11 @@ package Sender;
 import Model.Task;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.amqp.core.Queue;
 import Repository.Repository;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 public class Sender {
 
@@ -24,9 +21,6 @@ public class Sender {
     public Sender(@Qualifier("returnQueue") Queue senderQueue) {
         this.queue = senderQueue;
     }
-
-//    private ObjectMapper mapper = new ObjectMapper();
-
 
     private static Repository repository = Repository.getRepository();
     private ObjectMapper objectMapper = new ObjectMapper();
